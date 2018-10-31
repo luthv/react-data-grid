@@ -1,1 +1,1 @@
-module.exports = require('./src');
+require('./dist/react-data-grid');
