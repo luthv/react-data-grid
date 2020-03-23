@@ -1,21 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const setMaskStyle = ({ left, top, width, height, zIndex, position }) => {
+const setMaskStyle = ({ left, top, width, height, zIndex }) => {
   return {
     height,
     width,
     zIndex,
-    position: position || 'absolute',
+    position: 'absolute',
     pointerEvents: 'none',
-    transform: `translate(${left}px, ${top}px)`
+    transform: `translate(${left}px, ${top}px)`,
+    outline: 0
   };
 };
 
-const CellMask = ({ width, height, top, left, zIndex, children, position, ...rest }) => (
+const CellMask = ({ width, height, top, left, zIndex, children, innerRef, ...rest }) => (
   <div
-    style={setMaskStyle({ left, top, width, height, zIndex, position })}
+    style={setMaskStyle({ left, top, width, height, zIndex })}
     data-test="cell-mask"
+    ref={innerRef}
     {...rest}
   >
     {children}
@@ -28,7 +30,8 @@ CellMask.propTypes = {
   top: PropTypes.number.isRequired,
   left: PropTypes.number.isRequired,
   zIndex: PropTypes.number.isRequired,
-  children: PropTypes.node
+  children: PropTypes.node,
+  innerRef: PropTypes.func
 };
 
 export default CellMask;

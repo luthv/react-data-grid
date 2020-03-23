@@ -18,11 +18,11 @@ class CheckboxEditor extends React.Component {
   };
 
   render() {
-    let checked = this.props.value != null ? this.props.value : false;
-    let checkboxName = 'checkbox' + this.props.rowIdx;
+    const checked = this.props.value != null ? this.props.value : false;
+    const checkboxName = 'checkbox' + this.props.rowIdx;
     return (
       <div className="react-grid-checkbox-container checkbox-align" onClick={this.handleChange}>
-          <input className="react-grid-checkbox" type="checkbox" name={checkboxName} checked={checked} />
+          <input className="react-grid-checkbox" type="checkbox" name={checkboxName} checked={checked} readOnly />
           <label htmlFor={checkboxName} className="react-grid-checkbox-label"></label>
       </div>);
   }

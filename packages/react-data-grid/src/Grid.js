@@ -1,9 +1,9 @@
-const React                = require('react');
+import React from 'react';
 import PropTypes from 'prop-types';
-const Header               = require('./Header');
-const Viewport             = require('./Viewport');
+import Header from './Header';
+import Viewport from './Viewport';
 import cellMetaDataShape from 'common/prop-shapes/CellMetaDataShape';
-import columnUtils from './ColumnUtils';
+import { isFrozen } from './ColumnUtils';
 require('../../../themes/react-data-grid-core.css');
 
 class Grid extends React.Component {
@@ -71,7 +71,8 @@ class Grid extends React.Component {
     onCommit: PropTypes.func.isRequired,
     onScroll: PropTypes.func,
     scrollLeft: PropTypes.number,
-    RowsContainer: PropTypes.node
+    RowsContainer: PropTypes.node,
+    editorPortalTarget: PropTypes.instanceOf(Element).isRequired
   };
 
   static defaultProps = {
@@ -100,12 +101,12 @@ class Grid extends React.Component {
   };
 
   areFrozenColumnsScrolledLeft(scrollLeft) {
-    return scrollLeft > 0 && this.props.columns.some(c => columnUtils.isFrozen(c));
+    return scrollLeft > 0 && this.props.columns.some(c => isFrozen(c));
   }
 
   onScroll = (scrollState) => {
     this.props.onScroll(scrollState);
-    const {scrollLeft} = scrollState;
+    const { scrollLeft } = scrollState;
     if (this._scrollLeft !== scrollLeft || this.areFrozenColumnsScrolledLeft(scrollLeft)) {
       this._scrollLeft = scrollLeft;
       this._onScroll();
@@ -133,9 +134,17 @@ class Grid extends React.Component {
     this.viewport = viewport;
   };
 
+  setViewportContainerRef = (viewportContainer) => {
+    this.viewPortContainer = viewportContainer;
+  };
+
+  setEmptyViewRef = (emptyView) => {
+    this.emptyView = emptyView;
+  };
+
   render() {
-    let headerRows = this.props.headerRows || [{ref: (node) => this.row = node}];
-    let EmptyRowsView = this.props.emptyRowsView;
+    const { headerRows } = this.props;
+    const EmptyRowsView = this.props.emptyRowsView;
 
     return (
       <div style={this.getStyle()} className="react-grid-Grid">
@@ -151,13 +160,12 @@ class Grid extends React.Component {
           draggableHeaderCell={this.props.draggableHeaderCell}
           onSort={this.props.onSort}
           onHeaderDrop={this.props.onHeaderDrop}
-          // onScroll={this.onHeaderScroll}
           getValidFilterValues={this.props.getValidFilterValues}
           cellMetaData={this.props.cellMetaData}
           />
           {this.props.rowsCount >= 1 || (this.props.rowsCount === 0 && !this.props.emptyRowsView) ?
             <div
-              ref={(node) => { this.viewPortContainer = node; } }
+              ref={this.setViewportContainerRef}
               onKeyDown={this.props.onViewportKeydown}
               onKeyUp={this.props.onViewportKeyup}
               >
@@ -201,10 +209,11 @@ class Grid extends React.Component {
                   onCellRangeSelectionCompleted={this.props.onCellRangeSelectionCompleted}
                   onCommit={this.props.onCommit}
                   RowsContainer={this.props.RowsContainer}
+                  editorPortalTarget={this.props.editorPortalTarget}
                 />
             </div>
         :
-            <div ref={(node) => { this.emptyView = node; } } className="react-grid-Empty">
+            <div ref={this.setEmptyViewRef} className="react-grid-Empty">
                 <EmptyRowsView />
             </div>
         }
@@ -213,4 +222,4 @@ class Grid extends React.Component {
   }
 }
 
-module.exports = Grid;
+export default Grid;

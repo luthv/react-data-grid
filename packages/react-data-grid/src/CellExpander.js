@@ -10,14 +10,14 @@ class CellExpander extends React.Component {
 
   constructor(props) {
     super(props);
-    let expanded = props.expandableOptions && props.expandableOptions.expanded;
+    const expanded = props.expandableOptions && props.expandableOptions.expanded;
     this.state = { expanded: expanded };
   }
 
   componentWillReceiveProps(nextProps) {
-    let expanded = nextProps.expandableOptions && nextProps.expandableOptions.expanded;
+    const expanded = nextProps.expandableOptions && nextProps.expandableOptions.expanded;
     if (this.state.expanded !== expanded) {
-      this.setState({expanded});
+      this.setState({ expanded });
     }
   }
 
@@ -28,9 +28,11 @@ class CellExpander extends React.Component {
 
   render() {
     return (
-      <span className="rdg-cell-expand" onClick={this.onCellExpand} >
-        {this.state.expanded ? CellExpand.DOWN_TRIANGLE : CellExpand.RIGHT_TRIANGLE}
-      </span>
+      <div className="rdg-cell-expand">
+        <span onClick={this.onCellExpand}>
+          {this.state.expanded ? CellExpand.DOWN_TRIANGLE : CellExpand.RIGHT_TRIANGLE}
+        </span>
+      </div>
     );
   }
 }

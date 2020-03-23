@@ -1,11 +1,11 @@
 import React from 'react';
-import ColumnUtils from '../ColumnUtils';
+import { canEdit } from '../ColumnUtils';
 import ReactDOM from 'react-dom';
 const cloneElement = React.cloneElement;
 
 const render = function(element, mountPoint) {
-  let mount = mountPoint || document.createElement('div');
-  let instance = ReactDOM.render(element, mount);
+  const mount = mountPoint || document.createElement('div');
+  const instance = ReactDOM.render(element, mount);
 
   if (!instance.renderWithProps) {
     instance.renderWithProps = function(newProps) {
@@ -18,62 +18,66 @@ const render = function(element, mountPoint) {
 
 
 describe('ColumnUtils tests', () => {
-  let testProps = {
-    col: {
-      editable: true,
-      editor: {},
-      filterable: true,
-      formatOptions: '',
-      formula: '',
-      getRowMetaData: undefined,
-      key: 'PlacementType',
-      left: 460,
-      name: 'Adserver Placement Type',
-      options: [
-        'Tracking',
-        'Display'
-      ],
-      required: false,
-      resizable: true,
-      width: 150
-    },
-    rowData: {
-      CostModel: 'CPM',
-      Dimensions: '468x60',
-      EndDate: '17 Apr 16',
-      ExternalSiteName: 'Crimtan',
-      FloodlightActivityId: null,
-      FloodlightActivityName: null,
-      FormatAdditionalInfo: '',
-      FormatBasicDescription: 'Banner - Standard (468x60)',
-      InactivePlacementId: 'False',
-      NumberOfUnits: '147223',
-      PackageId: '522140',
-      PackageName: 'BannerFull (468x60), Leaderboard (728x90), Mpu (300x250)',
-      PlacementId: '11212201702442',
-      PlacementType: 'Display',
-      RowState: 0,
-      Section: 'Run of Site',
-      SentToAdserver: 'True',
-      StartDate: '14 Mar 16',
-      SupplierId: '20966',
-      SupplierName: 'CrimTan',
-      TotalCost: '0',
-      UnitCost: '0',
-      adServingFormat: 'VAST',
-      additionalPlacementInfo: '1',
-      addtlUnitDimensions: '15s',
-      deviceType: 'D',
-      executionId: '502859',
-      isSiteMatched: 'True',
-      os: 'IOS',
-      placementName: 'CrimTan>>RunofSite>>468x60>>15s>> >>D>>CPM>>AUT>>W>>IOS>>VAST>> >>1',
-      targetAudienceType: 'AUT',
-      techType: 'Serving',
-      webOrApp: 'W'
-    },
-    enableCellSelect: true
-  };
+  let testProps;
+
+  beforeEach(() => {
+    testProps = {
+      col: {
+        editable: true,
+        editor: {},
+        filterable: true,
+        formatOptions: '',
+        formula: '',
+        getRowMetaData: undefined,
+        key: 'PlacementType',
+        left: 460,
+        name: 'Adserver Placement Type',
+        options: [
+          'Tracking',
+          'Display'
+        ],
+        required: false,
+        resizable: true,
+        width: 150
+      },
+      rowData: {
+        CostModel: 'CPM',
+        Dimensions: '468x60',
+        EndDate: '17 Apr 16',
+        ExternalSiteName: 'Crimtan',
+        FloodlightActivityId: null,
+        FloodlightActivityName: null,
+        FormatAdditionalInfo: '',
+        FormatBasicDescription: 'Banner - Standard (468x60)',
+        InactivePlacementId: 'False',
+        NumberOfUnits: '147223',
+        PackageId: '522140',
+        PackageName: 'BannerFull (468x60), Leaderboard (728x90), Mpu (300x250)',
+        PlacementId: '11212201702442',
+        PlacementType: 'Display',
+        RowState: 0,
+        Section: 'Run of Site',
+        SentToAdserver: 'True',
+        StartDate: '14 Mar 16',
+        SupplierId: '20966',
+        SupplierName: 'CrimTan',
+        TotalCost: '0',
+        UnitCost: '0',
+        adServingFormat: 'VAST',
+        additionalPlacementInfo: '1',
+        addtlUnitDimensions: '15s',
+        deviceType: 'D',
+        executionId: '502859',
+        isSiteMatched: 'True',
+        os: 'IOS',
+        placementName: 'CrimTan>>RunofSite>>468x60>>15s>> >>D>>CPM>>AUT>>W>>IOS>>VAST>> >>1',
+        targetAudienceType: 'AUT',
+        techType: 'Serving',
+        webOrApp: 'W'
+      },
+      enableCellSelect: true
+    };
+  });
 
   describe('canEdit tests', () => {
     describe('canEdit tests using undefineds', () => {
@@ -84,7 +88,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editor).not.toBe(undefined);
@@ -100,7 +104,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editor).toBe(undefined);
@@ -115,7 +119,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = undefined;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editable).toBe(true);
@@ -129,7 +133,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = undefined;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editable).toBe(undefined);
@@ -146,7 +150,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editor).not.toBe(null);
@@ -162,7 +166,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editor).toBe(null);
@@ -177,7 +181,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = null;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editable).toBe(true);
@@ -191,7 +195,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = null;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(testProps.col.editable).toBe(null);
@@ -207,7 +211,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('boolean');
@@ -220,9 +224,10 @@ describe('ColumnUtils tests', () => {
         // Arrange
         testProps.col.editable = false;
         testProps.enableCellSelect = true;
+        testProps.col.editor = undefined;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('boolean');
@@ -235,9 +240,10 @@ describe('ColumnUtils tests', () => {
         // Arrange
         testProps.col.editable = true;
         testProps.enableCellSelect = false;
+        testProps.col.editor = undefined;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('boolean');
@@ -252,7 +258,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = false;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('boolean');
@@ -269,7 +275,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('function');
@@ -284,7 +290,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = true;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('function');
@@ -299,7 +305,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = false;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('function');
@@ -314,7 +320,7 @@ describe('ColumnUtils tests', () => {
         testProps.enableCellSelect = false;
 
         // Act
-        let result = ColumnUtils.canEdit(testProps.col, testProps. RowData, testProps.enableCellSelect);
+        const result = canEdit(testProps.col, testProps.RowData, testProps.enableCellSelect);
 
         // Assert
         expect(typeof(testProps.col.editable)).toBe('function');
